@@ -127,6 +127,67 @@ public class ImageManager {
     public static final int SORT_ASCENDING = 1;
     public static final int SORT_DESCENDING = 2;
 
+    private static String removableDir = null;
+    private static String internalDir = null;
+    private static String storageDir = Environment.getExternalStorageDirectory().toString();
+    private static boolean isSwitchedExternal = false;
+
+    static {
+        String switchablePair = SystemProperties.get("ro.vold.switchablepair");
+        if (switchablePair != null) {
+            String[] pair = switchablePair.split(",");
+            if (pair.length == 2) {
+                isSwitchedExternal =
+                        SystemProperties.getInt("persist.sys.vold.switchexternal", 0) == 1;
+
+                internalDir = isSwitchedExternal ? pair[0] : pair[1];
+                removableDir = isSwitchedExternal ? pair[1] : pair[0];
+
+                if (!checkFsWritable(internalDir)) {
+                    internalDir = null;
+                }
+                if (!checkFsWritable(removableDir)) {
+                    removableDir = null;
+                }
+            }
+        }
+    }
+
+    public static String getInternalDir() {
+        return internalDir;
+    }
+
+    public static String getRemovableDir() {
+        return removableDir;
+    }
+
+    public static boolean hasSwitchableStorage() {
+        return !TextUtils.isEmpty(internalDir) && !TextUtils.isEmpty(removableDir);
+    }
+
+    public static boolean isStorageSwitchedToInternal() {
+        return hasSwitchableStorage() && isSwitchedExternal;
+    }
+
+    public static void updateStorageDirectory(final Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("com.android.camera_preferences", 0);
+        boolean useRemovableStorage = prefs.getBoolean("store_on_external_sd",
+                !isStorageSwitchedToInternal());
+        if (useRemovableStorage && !TextUtils.isEmpty(removableDir)) {
+            storageDir = removableDir;
+        }
+        else if (!TextUtils.isEmpty(internalDir)) {
+            storageDir = internalDir;
+        }
+        else {
+            storageDir = Environment.getExternalStorageDirectory().toString();
+        }
+    }
+
+    public static String getStorageDirectory() {
+        return storageDir;
+    }
+
     public static final String CAMERA_IMAGE_BUCKET_NAME =
             Environment.getExternalStorageDirectory().toString()
             + "/DCIM/Camera";
