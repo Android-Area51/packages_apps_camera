@@ -16,7 +16,16 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory
+            android:title="@string/pref_camera_vol_zoom_title"
+            />
             <CheckBoxPreference
+                    android:key="vol_zoom_enabled"
+                    android:title="@string/pref_camera_vol_zoom"
+                    android:summary="@string/pref_camera_vol_zoom_summary"
+                    android:persistent="true" />
+
+    <PreferenceCategory
                     android:key="store_on_external_sd"
                     android:title="@string/pref_camera_storage_external"
                     android:summaryOn="@string/pref_camera_storage_external_summary_on"
