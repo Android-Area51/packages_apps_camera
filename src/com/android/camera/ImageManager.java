@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import android.os.SystemProperties;
 
 /**
  * {@code ImageManager} is used to retrieve and store images
