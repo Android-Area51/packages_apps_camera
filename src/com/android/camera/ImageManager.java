@@ -37,6 +37,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Log;
+import android.text.TextUtils;
 import android.view.OrientationEventListener;
 
 import java.io.File;
