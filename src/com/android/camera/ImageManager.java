@@ -35,10 +35,10 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemProperties;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Log;
-import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.view.OrientationEventListener;
 
@@ -63,89 +63,6 @@ public class ImageManager {
 
     private ImageManager() {
     }
-
-    private static String removableDir = null;
-    private static String internalDir = null;
-    private static String storageDir = Environment.getExternalStorageDirectory().toString();
-    private static boolean isSwitchedExternal = false;
-
-    static {
-        String switchablePair = SystemProperties.get("ro.vold.switchablepair");
-        if (switchablePair != null) {
-            String[] pair = switchablePair.split(",");
-            if (pair.length == 2) {
-                isSwitchedExternal =
-                        SystemProperties.getInt("persist.sys.vold.switchexternal", 0) == 1;
-
-                internalDir = isSwitchedExternal ? pair[0] : pair[1];
-                removableDir = isSwitchedExternal ? pair[1] : pair[0];
-
-                if (!checkFsWritable(internalDir)) {
-                    internalDir = null;
-                }
-                if (!checkFsWritable(removableDir)) {
-                    removableDir = null;
-                }
-            }
-        }
-    }
-
-    public static String getInternalDir() {
-        return internalDir;
-    }
-
-    public static String getRemovableDir() {
-        return removableDir;
-    }
-
-    public static boolean hasSwitchableStorage() {
-        return !TextUtils.isEmpty(internalDir) && !TextUtils.isEmpty(removableDir);
-    }
-
-    public static boolean isStorageSwitchedToInternal() {
-        return hasSwitchableStorage() && isSwitchedExternal;
-    }
-
-    public static void updateStorageDirectory(final Context context) {
-        SharedPreferences prefs = context.getSharedPreferences("com.android.camera_preferences", 0);
-        boolean useRemovableStorage = prefs.getBoolean("store_on_external_sd",
-                !isStorageSwitchedToInternal());
-        if (useRemovableStorage && !TextUtils.isEmpty(removableDir)) {
-            storageDir = removableDir;
-        }
-        else if (!TextUtils.isEmpty(internalDir)) {
-            storageDir = internalDir;
-        }
-        else {
-            storageDir = Environment.getExternalStorageDirectory().toString();
-        }
-    }
-
-    public static String getStorageDirectory() {
-        return storageDir;
-    }
-
-    /**
-     * Matches code in MediaProvider.computeBucketValues. Should be a common
-     * function.
-     */
-    public static String getBucketId(String path) {
-        return String.valueOf(path.toLowerCase().hashCode());
-    }
-
-    public static String getCameraImageDirectory() {
-        return getStorageDirectory() + "/DCIM/Camera";
-    }
-
-    public static String getCameraImageBucketId() {
-        return getBucketId(getCameraImageDirectory());
-    }
-
-    public static final String GALLERY_IMAGE_BUCKET_NAME =
-            Environment.getExternalStorageDirectory().toString()
-            + "/DCIM/Camera";
-    public static final String GALLERY_IMAGE_BUCKET_ID =
-            getBucketId(GALLERY_IMAGE_BUCKET_NAME);
 
     /**
      * {@code ImageListParam} specifies all the parameters we need to create an
@@ -212,6 +129,73 @@ public class ImageManager {
     // Sort
     public static final int SORT_ASCENDING = 1;
     public static final int SORT_DESCENDING = 2;
+
+    private static String removableDir = null;
+    private static String internalDir = null;
+    private static String storageDir = Environment.getExternalStorageDirectory().toString();
+    private static boolean isSwitchedExternal = false;
+
+    static {
+        String switchablePair = SystemProperties.get("ro.vold.switchablepair");
+        if (switchablePair != null) {
+            String[] pair = switchablePair.split(",");
+            if (pair.length == 2) {
+                isSwitchedExternal =
+                        SystemProperties.getInt("persist.sys.vold.switchexternal", 0) == 1;
+
+                internalDir = isSwitchedExternal ? pair[0] : pair[1];
+                removableDir = isSwitchedExternal ? pair[1] : pair[0];
+
+                if (!checkFsWritable(internalDir)) {
+                    internalDir = null;
+                }
+                if (!checkFsWritable(removableDir)) {
+                    removableDir = null;
+                }
+            }
+        }
+    }
+
+    public static String getInternalDir() {
+        return internalDir;
+    }
+
+    public static String getRemovableDir() {
+        return removableDir;
+    }
+
+    public static boolean hasSwitchableStorage() {
+        return !TextUtils.isEmpty(internalDir) && !TextUtils.isEmpty(removableDir);
+    }
+
+    public static boolean isStorageSwitchedToInternal() {
+        return hasSwitchableStorage() && isSwitchedExternal;
+    }
+
+    public static void updateStorageDirectory(final Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("com.android.camera_preferences", 0);
+        boolean useRemovableStorage = prefs.getBoolean("store_on_external_sd",
+                !isStorageSwitchedToInternal());
+        if (useRemovableStorage && !TextUtils.isEmpty(removableDir)) {
+            storageDir = removableDir;
+        }
+        else if (!TextUtils.isEmpty(internalDir)) {
+            storageDir = internalDir;
+        }
+        else {
+            storageDir = Environment.getExternalStorageDirectory().toString();
+        }
+    }
+
+    public static String getStorageDirectory() {
+        return storageDir;
+    }
+
+    public static final String CAMERA_IMAGE_BUCKET_NAME =
+            Environment.getExternalStorageDirectory().toString()
+            + "/DCIM/Camera";
+    public static final String CAMERA_IMAGE_BUCKET_ID =
+            getBucketId(CAMERA_IMAGE_BUCKET_NAME);
 
     /**
      * Matches code in MediaProvider.computeBucketValues. Should be a common
