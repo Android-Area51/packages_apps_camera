@@ -51,7 +51,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.Message;
 import android.os.StatFs;
 import android.os.SystemClock;
-import android.os.SystemProperties;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.MediaStore.Video;
