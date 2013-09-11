@@ -127,4 +127,5 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
         } else {
             volZoom.setEnabled(false);
         }
+    }
 }
