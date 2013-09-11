@@ -35,11 +35,11 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.SystemProperties;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.util.Log;
 import android.text.TextUtils;
+import android.os.SystemProperties;
 import android.view.OrientationEventListener;
 
 import java.io.File;
@@ -63,72 +63,6 @@ public class ImageManager {
 
     private ImageManager() {
     }
-
-    /**
-     * {@code ImageListParam} specifies all the parameters we need to create an
-     * image list (we also need a ContentResolver).
-     */
-    public static class ImageListParam implements Parcelable {
-        public DataLocation mLocation;
-        public int mInclusion;
-        public int mSort;
-        public String mBucketId;
-
-        // This is only used if we are creating an empty image list.
-        public boolean mIsEmptyImageList;
-
-        public ImageListParam() {
-        }
-
-        public void writeToParcel(Parcel out, int flags) {
-            out.writeInt(mLocation.ordinal());
-            out.writeInt(mInclusion);
-            out.writeInt(mSort);
-            out.writeString(mBucketId);
-            out.writeInt(mIsEmptyImageList ? 1 : 0);
-        }
-
-        private ImageListParam(Parcel in) {
-            mLocation = DataLocation.values()[in.readInt()];
-            mInclusion = in.readInt();
-            mSort = in.readInt();
-            mBucketId = in.readString();
-            mIsEmptyImageList = (in.readInt() != 0);
-        }
-
-        @Override
-        public String toString() {
-            return String.format("ImageListParam{loc=%s,inc=%d,sort=%d," +
-                "bucket=%s,empty=%b}", mLocation, mInclusion,
-                mSort, mBucketId, mIsEmptyImageList);
-        }
-
-        public static final Parcelable.Creator<ImageListParam> CREATOR
-                = new Parcelable.Creator<ImageListParam>() {
-            public ImageListParam createFromParcel(Parcel in) {
-                return new ImageListParam(in);
-            }
-
-            public ImageListParam[] newArray(int size) {
-                return new ImageListParam[size];
-            }
-        };
-
-        public int describeContents() {
-            return 0;
-        }
-    }
-
-    // Location
-    public static enum DataLocation { NONE, INTERNAL, EXTERNAL, ALL }
-
-    // Inclusion
-    public static final int INCLUDE_IMAGES = (1 << 0);
-    public static final int INCLUDE_VIDEOS = (1 << 2);
-
-    // Sort
-    public static final int SORT_ASCENDING = 1;
-    public static final int SORT_DESCENDING = 2;
 
     private static String removableDir = null;
     private static String internalDir = null;
@@ -218,6 +152,73 @@ public class ImageManager {
                     + " failed");
         }
     }
+
+
+    /**
+     * {@code ImageListParam} specifies all the parameters we need to create an
+     * image list (we also need a ContentResolver).
+     */
+    public static class ImageListParam implements Parcelable {
+        public DataLocation mLocation;
+        public int mInclusion;
+        public int mSort;
+        public String mBucketId;
+
+        // This is only used if we are creating an empty image list.
+        public boolean mIsEmptyImageList;
+
+        public ImageListParam() {
+        }
+
+        public void writeToParcel(Parcel out, int flags) {
+            out.writeInt(mLocation.ordinal());
+            out.writeInt(mInclusion);
+            out.writeInt(mSort);
+            out.writeString(mBucketId);
+            out.writeInt(mIsEmptyImageList ? 1 : 0);
+        }
+
+        private ImageListParam(Parcel in) {
+            mLocation = DataLocation.values()[in.readInt()];
+            mInclusion = in.readInt();
+            mSort = in.readInt();
+            mBucketId = in.readString();
+            mIsEmptyImageList = (in.readInt() != 0);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("ImageListParam{loc=%s,inc=%d,sort=%d," +
+                "bucket=%s,empty=%b}", mLocation, mInclusion,
+                mSort, mBucketId, mIsEmptyImageList);
+        }
+
+        public static final Parcelable.Creator<ImageListParam> CREATOR
+                = new Parcelable.Creator<ImageListParam>() {
+            public ImageListParam createFromParcel(Parcel in) {
+                return new ImageListParam(in);
+            }
+
+            public ImageListParam[] newArray(int size) {
+                return new ImageListParam[size];
+            }
+        };
+
+        public int describeContents() {
+            return 0;
+        }
+    }
+
+    // Location
+    public static enum DataLocation { NONE, INTERNAL, EXTERNAL, ALL }
+
+    // Inclusion
+    public static final int INCLUDE_IMAGES = (1 << 0);
+    public static final int INCLUDE_VIDEOS = (1 << 2);
+
+    // Sort
+    public static final int SORT_ASCENDING = 1;
+    public static final int SORT_DESCENDING = 2;
 
     //
     // Stores a bitmap or a jpeg byte array to a file (using the specified
