@@ -395,19 +395,31 @@ public class ImageManager {
         return makeImageList(cr, param);
     }
 
-    private static boolean checkFsWritable() {
+    private static boolean checkFsWritable(String directoryName) {
         // Create a temporary file to see whether a volume is really writeable.
         // It's important not to put it in the root directory which may have a
         // limit on the number of files.
-        String directoryName =
-                Environment.getExternalStorageDirectory().toString() + "/DCIM";
+        if (TextUtils.isEmpty(directoryName)) {
+            return false;
+        }
+        boolean created = false;
+        directoryName += "/DCIM";
         File directory = new File(directoryName);
         if (!directory.isDirectory()) {
             if (!directory.mkdirs()) {
                 return false;
             }
+            created = true;
         }
-        return directory.canWrite();
+        boolean ret = directory.canWrite();
+        if (created) {
+            directory.delete();
+        }
+        return ret;
+    }
+
+    private static boolean checkFsWritable() {
+        return checkFsWritable(getStorageDirectory());
     }
 
     public static boolean hasStorage() {
