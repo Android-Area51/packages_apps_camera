@@ -126,5 +126,15 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
         } else {
             volZoom.setEnabled(false);
         }
-  }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object value) {
+        CheckBoxPreference checkBox = (CheckBoxPreference)preference;
+        boolean checked = (Boolean)value;
+
+         if (checked) {
+            volZoom.setEnabled(true);
+        } else {
+            volZoom.setEnabled(false);
+        }
 }
