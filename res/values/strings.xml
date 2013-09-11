@@ -331,6 +331,10 @@
     <string name="switch_to_camera_lable">Switch to camera</string>
     <string name="switch_to_video_lable">Switch to video</string>
 
+<!-- ********************** -->
+    <!-- Advanced options label -->
+    <string name="advanced_options_label">Advanced options</string>
+
     <!-- Additional Settings -->
     <string name="pref_camera_storage_external">Use external SD card</string>
     <string name="pref_camera_storage_external_summary_off">Store photos and videos on internal phone memory (free space: %s)</string>
