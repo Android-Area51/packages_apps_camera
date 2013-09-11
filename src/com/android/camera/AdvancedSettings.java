@@ -32,7 +32,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
-public class AdvancedSettings extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
+public class AdvancedSettings extends PreferenceActivity implements Preference.onPreferenceChangeListener {
 
     private static final String KEY_VOL_ZOOM = "vol_zoom_enabled";
     private static final String KEY_STORE_EXTSD = "store_on_external_sd";
@@ -136,5 +136,5 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
             volZoom.setEnabled(true);
         } else {
             volZoom.setEnabled(false);
-        }
+    }
 }
