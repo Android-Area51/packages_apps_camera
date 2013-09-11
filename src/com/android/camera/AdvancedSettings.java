@@ -126,5 +126,19 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
         } else {
             volZoom.setEnabled(false);
         }
-  }
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object value) {
+        CheckBoxPreference checkBox = (CheckBoxPreference)preference;
+        boolean checked = (Boolean)value;
+
+        if (checkBox == volZoom) {
+            volZoom.setEnabled(true);
+        } else if (checkBox == storeExtSd) {
+            ImageManager.updateStorageDirectory(this);
+        }
+
+        return true;
+    }
 }
