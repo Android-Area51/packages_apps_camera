@@ -31,6 +31,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.preference.OnPreferenceChangeListener;
 
 public class AdvancedSettings extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
@@ -120,12 +121,11 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
         setListeners(false);
     }
 
-    @Override
     public void checkBoxes() {
         if (volZoom.isChecked()) {
             volZoom.setEnabled(true);
         } else {
             volZoom.setEnabled(false);
         }
-    }
+  }
 }
