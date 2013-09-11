@@ -1941,6 +1941,11 @@ public class Camera extends NoSearchActivity implements View.OnClickListener,
         }
     }
 
+    private void gotoCameraSettings() {
+        Intent intent = new Intent(this, AdvancedSettings.class);
+        startActivity(intent);
+    }
+
     private void gotoGallery() {
         MenuHelper.gotoCameraImageGallery(this);
     }
