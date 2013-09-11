@@ -121,7 +121,7 @@ public class AdvancedSettings extends PreferenceActivity implements Preference.O
     }
 
     public void checkBoxes() {
-        if (volZoom.isChecked() {
+        if (volZoom.isChecked()) {
             volZoom.setEnabled(true);
         } else {
             volZoom.setEnabled(false);
