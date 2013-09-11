@@ -2098,9 +2098,22 @@ public class Camera extends NoSearchActivity implements View.OnClickListener,
                 gotoGallery();
                 return true;
             }
+
         });
         gallery.setIcon(android.R.drawable.ic_menu_gallery);
         mGalleryItems.add(gallery);
+
+        MenuItem mCameraSettings = menu.add(Menu.NONE, Menu.NONE,
+                MenuHelper.POSITION_CAMERA_SETTINGS,
+                R.string.advanced_options_label)
+                .setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                gotoCameraSettings();
+                return true;
+            }
+        });
+        mCameraSettings.setIcon(android.R.drawable.ic_menu_preferences);
+        mGalleryItems.add(mCameraSettings);
 
         if (mNumberOfCameras > 1) {
             menu.add(Menu.NONE, Menu.NONE,
